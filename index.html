@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Apollo Talent Orchestrator</title>
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com "></script>
+
+    <!-- Plotly (Gráficos Interativos) -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js "></script>
+
+    <!-- Font Awesome (Ícones) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css " />
+
+    <!-- FullCalendar CSS/JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar @5.11.3/main.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar @5.11.3/main.min.js"></script>
+
+    <!-- Estilos Personalizados -->
+    <style>
+        .radar-chart,
+        .bar-chart {
+            width: 100%;
+            height: 400px;
+        }
+
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        .skill-progress {
+            height: 8px;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #6366f1;
+            border-radius: 3px;
+        }
+
+        .timeline-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 11px;
+            top: 24px;
+            height: calc(100% - 24px);
+            width: 2px;
+            background: #e5e7eb;
+        }
+
+        .fc .fc-toolbar-title {
+            font-size: 1.1em;
+        }
+
+        .fc .fc-button {
+            background-color: #6366f1;
+            border-color: #6366f1;
+        }
+
+        .fc .fc-button:hover {
+            background-color: #4f46e5;
+            border-color: #4f46e5;
+        }
+
+        .fc .fc-button-primary:not(:disabled).fc-button-active {
+            background-color: #4f46e5;
+            border-color: #4f46e5;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-900 antialiased">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-20 bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="bg-purple-500 text-white p-2 rounded-lg">
+                    <i class="fas fa-rocket text-xl"></i>
+                </div>
+                <h1 class="text-xl font-bold">Apollo Talent Orchestrator</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button onclick="openModal()" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition flex items-center">
+                    <i class="fas fa-plus mr-2"></i>Novo Colaborador
+                </button>
+                <img src="https://randomuser.me/api/portraits/women/44.jpg " alt="Perfil" class="w-10 h-10 rounded-full cursor-pointer" />
+            </div>
+        </div>
+    </header>
+
+    <!-- Metrics Cards -->
+    <section class="mt-20 pt-6 pb-6 bg-gradient-to-r from-purple-500 to-purple-600">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-purple-100 text-purple-600 mr-4">
+                            <i class="fas fa-users text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm">Total Colaboradores</p>
+                            <h3 class="text-2xl font-bold">142</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-purple-100 text-purple-600 mr-4">
+                            <i class="fas fa-chart-line text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm">Alocação Ideal</p>
+                            <h3 class="text-2xl font-bold">78%</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-purple-100 text-purple-600 mr-4">
+                            <i class="fas fa-exclamation-triangle text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm">Gaps Críticos</p>
+                            <h3 class="text-2xl font-bold">23</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-purple-100 text-purple-600 mr-4">
+                            <i class="fas fa-bullseye text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm">Progresso Médio</p>
+                            <h3 class="text-2xl font-bold">64%</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 flex flex-col lg:flex-row">
+        <!-- Sidebar -->
+        <aside class="w-full lg:w-64 mb-8 lg:mb-0 lg:mr-8">
+            <nav class="bg-white rounded-lg shadow overflow-hidden">
+                <ul class="divide-y divide-gray-200">
+                    <li><button data-tab="allocation" class="tab-btn w-full text-left px-6 py-4 flex items-center text-purple-600 bg-purple-50 border-l-4 border-purple-500"><i class="fas fa-project-diagram mr-3"></i><span>Alocação de Talentos</span></button></li>
+                    <li><button data-tab="squads" class="tab-btn w-full text-left px-6 py-4 flex items-center text-gray-600 hover:text-purple-600 hover:bg-purple-50"><i class="fas fa-people-group mr-3"></i><span>Comparativo de Squads</span></button></li>
+                    <li><button data-tab="roadmap" class="tab-btn w-full text-left px-6 py-4 flex items-center text-gray-600 hover:text-purple-600 hover:bg-purple-50"><i class="fas fa-map mr-3"></i><span>Roadmap de Capacitação</span></button></li>
+                    <li><button data-tab="interviews" class="tab-btn w-full text-left px-6 py-4 flex items-center text-gray-600 hover:text-purple-600 hover:bg-purple-50"><i class="fas fa-comments mr-3"></i><span>Módulo de Entrevistas</span></button></li>
+                    <li><button data-tab="training" class="tab-btn w-full text-left px-6 py-4 flex items-center text-gray-600 hover:text-purple-600 hover:bg-purple-50"><i class="fas fa-graduation-cap mr-3"></i><span>Painel de Treinamento</span></button></li>
+                    <li><button data-tab="oneonone" class="tab-btn w-full text-left px-6 py-4 flex items-center text-gray-600 hover:text-purple-600 hover:bg-purple-50"><i class="fas fa-calendar-check mr-3"></i><span>1:1s e Feedback</span></button></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Tab Contents -->
+        <div class="flex-1">
+            <div id="allocation" class="tab-content active">
+                <!-- Conteúdo da aba Alocação -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h2 class="text-xl font-bold mb-4">Alocação de Talentos</h2>
+                    <div class="mb-6">
+                        <div class="flex flex-col md:flex-row gap-4 mb-6">
+                            <select class="bg-gray-100 border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded-lg focus:outline-none focus:bg-white focus:border-purple-500">
+                                <option>Selecione um Projeto</option>
+                                <option>Projeto Apollo</option>
+                                <option>Projeto Orion</option>
+                                <option>Projeto Artemis</option>
+                            </select>
+                            <select multiple class="bg-gray-100 border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded-lg focus:outline-none focus:bg-white focus:border-purple-500 h-10 overflow-hidden">
+                                <option>Selecione Habilidades</option>
+                                <option>React</option>
+                                <option>Node.js</option>
+                                <option>Python</option>
+                                <option>AWS</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2 overflow-x-auto custom-scrollbar">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Colaborador</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Cargo</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Projeto</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Score</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <img class="h-10 w-10 rounded-full" src="https://randomuser.me/api/portraits/men/32.jpg " alt="" />
+                                                <div class="ml-4">
+                                                    <div class="text-sm font-medium">John Smith</div>
+                                                    <div class="text-sm text-gray-500">React, Node.js</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">Engenheiro Sênior</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Projeto Apollo</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                                <div class="bg-purple-600 h-2.5 rounded-full" style="width: 85%"></div>
+                                            </div>
+                                            <span class="text-xs text-gray-500">85%</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Alocado</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <div class="bg-white p-4 rounded-lg shadow">
+                                <h3 class="text-lg font-medium mb-4">Perfil de Habilidades</h3>
+                                <div id="radarChart" class="radar-chart" style="height: 400px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Outras abas omitidas por brevidade -->
+            <!-- Adicione aqui os outros tab contents -->
+
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="addEmployeeModal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden z-30">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-md bg-white">
+            <div class="flex justify-between items-center pb-3 border-b">
+                <h3 class="text-xl font-bold">Adicionar Novo Colaborador</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form class="mt-4">
+                <!-- Conteúdo do formulário omitido por brevidade -->
+                <div class="flex justify-end space-x-3 pt-4 border-t">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition">Salvar Colaborador</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Funções de controle de tabs
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabName = button.getAttribute('data-tab');
+
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('text-purple-600', 'bg-purple-50', 'border-purple-500');
+                    btn.classList.add('text-gray-600', 'hover:text-purple-600', 'hover:bg-purple-50');
+                });
+
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+
+                document.getElementById(tabName).classList.add('active');
+                button.classList.remove('text-gray-600', 'hover:text-purple-600', 'hover:bg-purple-50');
+                button.classList.add('text-purple-600', 'bg-purple-50', 'border-purple-500');
+            });
+        });
+
+        // Modal
+        const modal = document.getElementById('addEmployeeModal');
+        const openModalBtn = document.querySelector('[onclick="openModal()"]');
+        const closeModalBtn = document.getElementById('btnCloseModal');
+        const btnCancel = document.getElementById('btnCancel');
+
+        [openModalBtn, closeModalBtn, btnCancel].forEach(el => {
+            el.addEventListener('click', () => {
+                modal.classList.toggle('hidden');
+            });
+        });
+
+        // Gráfico Radar
+        const radarData = [{
+            type: 'scatterpolar',
+            r: [90, 75, 85, 70, 60, 80],
+            theta: ['React', 'Node.js', 'Python', 'AWS', 'Docker', 'SQL'],
+            fill: 'toself',
+            marker: { color: '#6366f1' },
+            line: { color: '#6366f1' }
+        }];
+        const radarLayout = {
+            polar: { radialaxis: { visible: true, range: [0, 100] } },
+            showlegend: false,
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            margin: { l: 40, r: 40, b: 40, t: 40, pad: 4 }
+        };
+        Plotly.newPlot('radarChart', radarData, radarLayout, { responsive: true });
+
+        // Calendar
+        document.addEventListener('DOMContentLoaded', function () {
+            const calendarEl = document.getElementById('calendar');
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: [
+                    {
+                        title: '1:1 com Sarah Johnson',
+                        start: new Date(),
+                        end: new Date(new Date().setHours(new Date().getHours() + 1)),
+                        color: '#6366f1'
+                    }
+                ]
+            });
+            calendar.render();
+        });
+    </script>
+</body>
+</html>
