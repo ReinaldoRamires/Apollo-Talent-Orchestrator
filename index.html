@@ -359,5 +359,55 @@
             calendar.render();
         });
     </script>
+    <!-- Supabase JS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/ @supabase/supabose-js@2"></script>
+
+<script>
+  // Inicialize o cliente do Supabase
+  const supabaseUrl = 'https://sqfsyxgllqnrjhaaztkb.supabase.co';
+  const supabaseKey = process.env.SUPABASE_KEY;
+
+  const { createClient } = supabase;
+  const supabaseClient = createClient(supabaseUrl, supabaseKey);
+  <script>
+  // Função para salvar colaborador
+  async function saveCandidate(event) {
+    event.preventDefault();
+
+    const name = document.getElementById("name").value.trim();
+    const role = document.getElementById("role").value;
+    const skills = document.getElementById("skills").value.split(',').map(skill => skill.trim());
+    const project = document.getElementById("project").value;
+    const email = `${name.toLowerCase().replace(' ', '.')}-example.com`; // Email fictício — você pode adicionar campo de e-mail se quiser
+    const resume_url = ""; // Campo opcional
+    const created_at = new Date().toISOString();
+
+    // Salvar no Supabase
+    const { data, error } = await supabaseClient
+      .from('candidates')
+      .insert([
+        {
+          name,
+          email,
+          skills,
+          resume_url,
+          created_at
+        }
+      ]);
+
+    if (error) {
+      console.error("Erro ao salvar:", error);
+      alert("Erro ao salvar colaborador.");
+    } else {
+      console.log("Colaborador salvo:", data);
+      alert("Colaborador salvo com sucesso!");
+      closeModal();
+    }
+  }
+
+  // Vincule o evento submit do formulário
+  document.getElementById("employeeForm").addEventListener("submit", saveCandidate);
+</script>
+</script>
 </body>
 </html>
