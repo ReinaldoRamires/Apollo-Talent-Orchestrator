@@ -276,60 +276,48 @@
 
     <!-- Formulário -->
     <form id="employeeForm" class="mt-4 space-y-4">
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
-        <input type="text" id="candidateName" name="name"
-          placeholder="Ex.: João Silva"
-          required
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500">
-      </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
+    <input type="text" id="name" name="name" required
+      class="w-full px-3 py-2 border rounded-lg focus:outline-none">
+  </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-        <input type="email" id="candidateEmail" name="email"
-          placeholder="joao.silva@example.com"
-          required
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500">
-      </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Cargo</label>
+    <select id="role" name="role" required
+      class="w-full px-3 py-2 border rounded-lg focus:outline-none">
+      <option value="">Selecione</option>
+      <option value="Tech Lead">Tech Lead</option>
+      <option value="Engenheiro Sênior">Engenheiro Sênior</option>
+      <option value="Engenheiro Pleno">Engenheiro Pleno</option>
+      <option value="Engenheiro Júnior">Engenheiro Júnior</option>
+    </select>
+  </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Habilidades Técnicas</label>
-        <input type="text" id="candidateSkills" name="skills"
-          placeholder="React, Node.js, Python"
-          required
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500">
-        <p class="text-xs text-gray-500 mt-1">Separe as habilidades por vírgula</p>
-      </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Habilidades Técnicas</label>
+    <input type="text" id="skills" name="skills"
+      placeholder="React, Node.js, Python"
+      class="w-full px-3 py-2 border rounded-lg focus:outline-none">
+  </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Cargo</label>
-        <select id="candidateRole" name="role"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500">
-          <option value="">Selecione</option>
-          <option value="Tech Lead">Tech Lead</option>
-          <option value="Engenheiro Sênior">Engenheiro Sênior</option>
-          <option value="Engenheiro Pleno">Engenheiro Pleno</option>
-          <option value="Engenheiro Júnior">Engenheiro Júnior</option>
-        </select>
-      </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Projeto Alocado</label>
+    <select id="project" name="project"
+      class="w-full px-3 py-2 border rounded-lg focus:outline-none">
+      <option value="Projeto Apollo">Projeto Apollo</option>
+      <option value="Projeto Orion">Projeto Orion</option>
+      <option value="Projeto Artemis">Projeto Artemis</option>
+    </select>
+  </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Projeto Alocado</label>
-        <select id="candidateProject" name="project"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500">
-          <option value="Projeto Apollo">Projeto Apollo</option>
-          <option value="Projeto Orion">Projeto Orion</option>
-          <option value="Projeto Artemis">Projeto Artemis</option>
-        </select>
-      </div>
-
-      <div class="flex justify-end space-x-3 pt-4 border-t">
-        <button type="button" onclick="closeModal()"
-          class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition">Cancelar</button>
-        <button type="submit"
-          class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition">Salvar Colaborador</button>
-      </div>
-    </form>
+  <div class="flex justify-end space-x-3 pt-4 border-t">
+    <button type="button" onclick="closeModal()"
+      class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition">Cancelar</button>
+    <button type="submit"
+      class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition">Salvar Colaborador</button>
+  </div>
+</form>
   </div>
 </div>
 </form>
@@ -411,44 +399,47 @@
         });
     </script>
     <!-- Supabase JS SDK -->
-<script src="https://cdn.jsdelivr.net/npm/ @supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  // Substitua pelas suas chaves reais do Supabase
+  // Cole suas credenciais reais aqui
   const supabaseUrl = 'https://sqfsyxgllqnrjhaaztkb.supabase.co';
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxZnN5eGdsbHFucmpoYWF6dGtiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgxMTc3NzMsImV4cCI6MjA2MzY5Mzc3M30.qJJ2IZC5notCbfiQ_p5EzvrZ9QWIUft8oZ1SYmVmiWM';
 
   const { createClient } = supabase;
-  const supabase = createClient(supabaseUrl, supabaseKey);
+  const supabaseClient = createClient(supabaseUrl, supabaseKey);
 
-  // Função para salvar colaborador
   async function saveCandidate(event) {
     event.preventDefault();
 
-    const name = document.getElementById("candidateName").value.trim();
-    const email = document.getElementById("candidateEmail").value.trim();
-    const skillsInput = document.getElementById("candidateSkills").value.trim();
-    const resume_url = document.getElementById("candidateResume")?.value || null;
+    const name = document.getElementById("name").value.trim();
+    const role = document.getElementById("role").value.trim();
+    const skillsInput = document.getElementById("skills").value.trim();
+    const project = document.getElementById("project").value;
 
-    // Converter habilidades em array
+    if (!name || !role || !skillsInput) {
+      alert("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+
     const skills = skillsInput.split(',').map(skill => skill.trim());
+    const email = `${name.toLowerCase().replace(' ', '.')}@example.com`;
 
-    // Salvar no Supabase
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('candidates')
       .insert([
         {
           name,
           email,
           skills,
-          resume_url,
+          resume_url: null,
           created_at: new Date().toISOString()
         }
       ]);
 
     if (error) {
-      console.error("Erro ao salvar:", error);
-      alert("Erro ao cadastrar colaborador.");
+      console.error("Erro ao salvar colaborador:", error);
+      alert("Erro ao salvar colaborador.");
     } else {
       console.log("Colaborador salvo:", data);
       alert("Colaborador cadastrado com sucesso!");
@@ -456,7 +447,6 @@
     }
   }
 
-  // Vincule evento submit do formulário
   window.onload = () => {
     const form = document.getElementById("employeeForm");
     if (form) {
