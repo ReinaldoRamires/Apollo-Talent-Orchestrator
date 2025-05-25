@@ -398,35 +398,30 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>    
- <script>
-  // Configuração do Supabase
+<script>
+  // Substitua pelas suas chaves reais do Supabase
   const supabaseUrl = 'https://sqfsyxgllqnrjhaaztkb.supabase.co';
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxZnN5eGdsbHFucmpoYWF6dGtiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgxMTc3NzMsImV4cCI6MjA2MzY5Mzc3M30.qJJ2IZC5notCbfiQ_p5EzvrZ9QWIUft8oZ1SYmVmiWM';
-
   const { createClient } = supabase;
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   // Função para salvar colaborador
   async function saveCandidate(event) {
-    event.preventDefault(); // Não recarregar página
+    event.preventDefault();
 
     const name = document.getElementById("candidateName").value.trim();
     const role = document.getElementById("candidateRole").value.trim();
     const skillsInput = document.getElementById("candidateSkills").value.trim();
-    const project = document.getElementById("candidateProject").value.trim();
+    const project = document.getElementById("candidateProject").value;
 
     if (!name || !role || !skillsInput) {
       alert("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
 
-    // Converter habilidades em array
     const skills = skillsInput.split(',').map(skill => skill.trim());
-
-    // Gerar e-mail automático
     const email = `${name.toLowerCase().replace(' ', '.')}@example.com`;
 
-    // Enviar para o banco
     const { data, error } = await supabase
       .from('candidates')
       .insert([
@@ -440,24 +435,29 @@
       ]);
 
     if (error) {
-      console.error("Erro ao salvar:", error);
+      console.error("Erro ao salvar colaborador:", error);
       alert("Erro ao cadastrar colaborador.");
     } else {
       console.log("Colaborador salvo:", data);
       alert("Colaborador cadastrado com sucesso!");
-      closeModal(); // Fecha o modal
+      closeModal();
     }
   }
 
-  // Vincule o evento submit ao formulário
-  const form = document.getElementById("employeeForm");
-  if (form) {
-    form.addEventListener("submit", saveCandidate);
-  } else {
-    console.warn("Formulário não encontrado. Confira o ID 'employeeForm'");
-  }
+  // Vincular evento submit do formulário
+  window.onload = () => {
+    const form = document.getElementById("employeeForm");
+    if (form) {
+      form.addEventListener("submit", saveCandidate);
+    } else {
+      console.warn("Formulário não encontrado. Confira se tem id='employeeForm'");
+    }
+  };
 </script>
 </script>
 </script>
+</script>
+<!-- Supabase JS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>
