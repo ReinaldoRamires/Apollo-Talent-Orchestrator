@@ -330,6 +330,33 @@
   </div>
 </div>
     <!-- Scripts -->
+     <script>
+  async function loadCandidates() {
+    const { data, error } = await supabase.from('candidates').select('*');
+
+    if (error) {
+      console.error("Erro ao carregar colaboradores:", error);
+      return;
+    }
+
+    const container = document.getElementById("candidatesList"); // Crie um div com esse ID
+    container.innerHTML = '';
+
+    data.forEach(candidate => {
+      const card = `
+        <div class="bg-white p-4 rounded shadow mb-3">
+          <h3 class="font-bold">${candidate.name}</h3>
+          <p>${candidate.email}</p>
+          <p>Habilidades: ${candidate.skills.join(', ')}</p>
+        </div>
+      `;
+      container.innerHTML += card;
+    });
+  }
+
+  // Chame essa função quando a aba for aberta
+  document.querySelector('[data-tab="allocation"]').addEventListener("click", loadCandidates);
+</script>
     <script>
         // Funções de controle de tabs
         const tabButtons = document.querySelectorAll('.tab-btn');
