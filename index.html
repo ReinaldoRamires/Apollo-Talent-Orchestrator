@@ -275,7 +275,7 @@
     </div>
 
     <!-- Formulário -->
-    <form id="employeeForm" class="mt-4 space-y-4">
+    <form id="employeeForm" method="POST" class="mt-4">
   <div>
     <label class="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
     <input type="text" id="candidateName" name="name" required class="w-full px-3 py-2 border rounded-lg focus:outline-none">
@@ -463,7 +463,7 @@
           name,
           email,
           skills,
-          resume_url: "",
+          resume_url: '', // URL do currículo, se aplicável
           created_at: new Date().toISOString()
         }
       ]);
@@ -502,6 +502,51 @@
       }
     });
   };
+  async function saveCandidate(event) {
+  event.preventDefault();
+  console.log("Tentando salvar colaborador...");
+
+  const name = document.getElementById("candidateName").value.trim();
+  const email = document.getElementById("candidateEmail").value.trim();
+  const skillsInput = document.getElementById("candidateSkills").value.trim();
+
+  console.log("Valores capturados:", { name, email, skillsInput });
+
+  if (!name || !email || !skillsInput) {
+    alert("Campos obrigatórios faltando.");
+    return;
+  }
+
+  try {
+    const { data, error } = await supabase.from('candidates').insert([
+      {
+        name,
+        email,
+        skills: skillsInput.split(',').map(skill => skill.trim())
+      }
+    ]);
+
+    if (error) {
+      console.error("Erro do Supabase:", error.message);
+      alert("Erro ao salvar. Veja o console.");
+    } else {
+      console.log("Salvo com sucesso:", data);
+      alert("Colaborador salvo!");
+      closeModal();
+    }
+  } catch (err) {
+    console.error("Erro inesperado:", err);
+    alert("Erro inesperado. Veja o console.");
+  }
+}
+
+  function openModal() {
+    document.getElementById("addEmployeeModal").classList.remove("hidden");
+  }
+
+  function closeModal() {
+    document.getElementById("addEmployeeModal").classList.add("hidden");
+  }
 </script>
 </body>
 </html>
